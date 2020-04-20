@@ -10,7 +10,7 @@ app.get('/api/*', (req, res) => {
   const api = req.url.split('/api');
   const host = process.env.API_HOST || 'localhost';
   axios.get(`http://${host}:3000${api[1]}`)
-    .then((result) => res.json(result.data[0]))
+    .then((result) => res.json(result))
     .catch(() => {
       console.log('Unable to reach API server!');
       res.status(400);

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header>
+    <header class="header">
       <nav>
         <ul>
           <li class="nav-item">
@@ -44,7 +44,7 @@ main {
   min-height: 100%;
   padding: 30px 0px 30px 0px;
 }
-header {
+.header {
   background-color: #999;
   width: 100%;
   margin: 0 auto;

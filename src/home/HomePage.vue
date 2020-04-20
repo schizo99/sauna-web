@@ -36,7 +36,7 @@ export default {
     },
     getTemp() {
       return axios.get('/api/temp').then(
-        (result) => result.data.last / 100,
+        (result) => { console.log(result.data[0]); return result.data[0].last / 100; },
       );
     },
   },
