@@ -30,7 +30,7 @@ export default {
   name: 'TempGraph',
   components: { LineChart, VueSlider },
   data: () => ({
-    value: 0,
+    value: 1,
     loadHours: 1,
     loaded: false,
     chartdata: null,
@@ -67,7 +67,7 @@ export default {
   methods: {
     async getData() {
       try {
-        if (this.value > 0) this.loadHours = this.value;
+        if (this.value > 1) this.loadHours = this.value;
         const userlist = await axios.get(`/api/temps/${this.loadHours}`).then((res) => res);
         const data = userlist.data.map((d) => ({ y: d.temp / 100, t: moment(d.time) }));
         this.chartdata = {
