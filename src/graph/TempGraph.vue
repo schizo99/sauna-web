@@ -7,7 +7,7 @@
         v-bind="sliderOptions"
         @drag-end="getData()"
       />
-      <p>{{ value }} hours</p>
+      <input v-on:keyup.enter="getData" :value="value" />
     </div>
     <div >
       <LineChart
@@ -26,6 +26,7 @@ import VueSlider from 'vue-slider-component';
 import LineChart from './Chart.vue';
 import 'vue-slider-component/theme/antd.css';
 
+
 export default {
   name: 'TempGraph',
   components: { LineChart, VueSlider },
@@ -35,6 +36,7 @@ export default {
     loaded: false,
     chartdata: null,
     sliderOptions: {
+      min: 1,
       dotSize: 14,
       width: 200,
       height: 4,
@@ -48,6 +50,10 @@ export default {
       scales: {
         xAxes: [{
           type: 'time',
+          ticks: {
+            maxTicksLimit: 10,
+            sampleSize: 10,
+          },
           time: {
             unit: 'minute',
             stepSize: 3,
@@ -65,7 +71,10 @@ export default {
     },
   }),
   methods: {
-    async getData() {
+    async getData(event) {
+      if (event) {
+        this.value = event.target.value;
+      }
       try {
         if (this.value > 1) this.loadHours = this.value;
         const userlist = await axios.get(`/api/temps/${this.loadHours}`).then((res) => res);
@@ -78,6 +87,9 @@ export default {
             borderWidth: 4,
             pointBorderWidth: 0.4,
             label: 'Temperature',
+            ticks: {
+              source: 'labels',
+            },
             data,
           }],
         };
