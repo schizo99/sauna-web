@@ -7,7 +7,11 @@
         v-bind="sliderOptions"
         @drag-end="getData()"
       />
-      <input v-on:keyup.enter="getData" :value="value" />
+      <input type="text"
+             v-bind:style="{width: value.toString().length + 'ch'}"
+             v-on:input="resizeInput"
+             v-on:keyup.enter="getData"
+             :value="value"/>  days
     </div>
     <div >
       <LineChart
@@ -71,9 +75,18 @@ export default {
     },
   }),
   methods: {
+    resizeInput(event) {
+      const input = event.target;
+      input.style.width = `${input.value.length}ch`;
+    },
     async getData(event) {
       if (event) {
+        const input = event.target;
         this.value = event.target.value;
+        if (!this.value > 0) {
+          input.style.width = '1ch';
+          this.value = 1;
+        }
       }
       try {
         if (this.value > 1) this.loadHours = this.value;
@@ -106,6 +119,21 @@ export default {
 };
 </script>
 <style scoped>
+
+input[type=text] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    font-size: .7em;
+    outline: none;
+}
+
+input[type=text]:focus {
+    padding: 4px;
+    border:2px solid #aaa;
+}
+
 .chart {
   height: 350px;
 }

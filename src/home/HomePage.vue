@@ -1,7 +1,13 @@
 <template>
   <div class="home">
   <div class="temp">
-    Current temp: <span v-if="temp">{{ temp }} &#8451;</span>
+    Current temp: <span v-if="temp">{{ temp.last / 100 }} &#8451;</span>
+  </div>
+  <div>
+    Last update:
+    <span v-if="temp">
+      {{ temp.time | moment("YYYY-MM-DD HH:mm:ss") }}
+    </span>
   </div>
   <div>
     <router-link to="/graph">Graph</router-link>
@@ -36,7 +42,8 @@ export default {
     },
     getTemp() {
       return axios.get('/api/temp').then(
-        (result) => { console.log(result.data[0]); return result.data[0].last / 100; },
+        (result) => result.data[0]
+        ,
       );
     },
   },
