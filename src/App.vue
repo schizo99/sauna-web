@@ -39,12 +39,14 @@ body {
 }
 main {
   margin: 0 auto;
-  background-color: white;
   width: 100%;
   min-height: 100%;
   padding: 30px 0px 30px 0px;
 }
 .header {
+    display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #999;
   width: 100%;
   margin: 0 auto;

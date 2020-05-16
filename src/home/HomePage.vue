@@ -1,17 +1,18 @@
 <template>
   <div class="home">
-  <div class="temp">
-    Current temp: <span v-if="temp">{{ temp.last / 100 }} &#8451;</span>
-  </div>
-  <div>
-    Last update:
-    <span v-if="temp">
-      {{ temp.time | moment("YYYY-MM-DD HH:mm:ss") }}
-    </span>
-  </div>
-  <div>
-    <router-link to="/graph">Graph</router-link>
-  </div>
+    <div class="temp">
+      Current temp: <span
+        v-if="temp"
+        v-bind:style="{color: color}">
+        {{ temp.last / 100 }} &#8451;
+      </span>
+    </div>
+    <div style="color: white;">
+      Last update:
+      <span v-if="temp">
+        {{ temp.time | moment("YYYY-MM-DD HH:mm:ss") }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -23,6 +24,7 @@ export default {
   name: 'HomePage',
   data() {
     return {
+      color: 'yellow',
       focused: true,
       temp: null,
     };
@@ -40,6 +42,9 @@ export default {
     async time() {
       if (this.focused) {
         this.temp = await this.getTemp();
+        if (this.temp.last < 5000) this.color = 'yellow';
+        else if (this.temp.last < 8000) this.color = 'orange';
+        else this.color = 'red';
       }
       setTimeout(this.time, 5000);
     },
@@ -55,7 +60,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.home {
+  padding: 30px;
+  background-color: #555;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
 .temp {
   font-size: 24px;
+  color: white;
 }
 </style>
