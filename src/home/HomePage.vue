@@ -28,7 +28,10 @@ export default {
     };
   },
   created() {
-    window.addEventListener('focus', () => { this.focused = true; });
+    window.addEventListener('focus', async () => {
+      this.focused = true;
+      this.temp = await this.getTemp();
+    });
     window.addEventListener('blur', () => { this.focused = false; });
 
     this.time();
