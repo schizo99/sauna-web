@@ -1,7 +1,7 @@
 <template>
   <div class="home" style="position: relative;">
     <div>
-      <div style="position: absolute; top:0; right:0; z-index:0; padding-top: 30px;">
+      <div >
         <div class="slider"  style="padding-top: 3px;">
           <vue-slider
             ref="slider"
@@ -21,7 +21,7 @@
       <div style="position: absolute; z-index:1; top: 25px; right:0; padding-top: 30px;">
         <div class="slider"  style="padding-top: 3px;">
           <vue-slider
-            ref="slider"
+            ref="hourSlider"
             v-model="hours"
             v-bind="hourSliderOptions"
             @drag-end="zoomHours()"
@@ -66,6 +66,7 @@ export default {
     chartdata: null,
     sliderOptions: {
       min: 1,
+      max: 100,
       dotSize: 14,
       width: 200,
       height: 4,
