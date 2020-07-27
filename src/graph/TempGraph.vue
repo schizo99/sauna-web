@@ -157,6 +157,7 @@ export default {
           this.hours = 24;
           this.previousHours = 24;
         }
+        console.log('loadHours, hours', this.loadHours, this.hours);
         const userlist = await axios.get(`/api/temps/${this.loadHours}/${this.hours}`).then((res) => res);
         const data = userlist.data.map((d) => ({ y: d.temp / 100, t: moment(d.time) }));
         this.chartdata = {
@@ -175,7 +176,9 @@ export default {
             data,
           }],
         };
-        this.zoomHours();
+        if (this.hours === 1) {
+          this.zoomHours();
+        }
         this.loaded = true;
       } catch (e) {
         console.error(e);

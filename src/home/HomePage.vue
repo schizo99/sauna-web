@@ -4,7 +4,7 @@
       Current temp: <span
         v-if="temp"
         v-bind:style="{color: color}">
-        {{ temp.last / 100 }} &#8451;
+        {{ temp.temp / 100 }} &#8451;
       </span>
     </div>
     <div style="color: white;">
@@ -42,8 +42,9 @@ export default {
     async time() {
       if (this.focused) {
         this.temp = await this.getTemp();
-        if (this.temp.last < 5000) this.color = 'yellow';
-        else if (this.temp.last < 8000) this.color = 'orange';
+        console.log(this.temp);
+        if (this.temp.temp < 5000) this.color = 'yellow';
+        else if (this.temp.temp < 8000) this.color = 'orange';
         else this.color = 'red';
       }
       setTimeout(this.time, 5000);
