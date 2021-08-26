@@ -158,7 +158,7 @@ export default {
         }
         console.log('loadHours, hours', this.loadHours, this.hours);
         const userlist = await axios.get(`/api/temps/${this.loadHours}/${this.hours}`).then((res) => res);
-        const data = userlist.data.map((d) => ({ y: d.temp, t: moment(d.time) }));
+        const data = userlist.data.map((d) => ({ y: d.temp / 100, t: moment(d.time) }));
         this.chartdata = {
           datasets: [{
             spanGaps: true,
