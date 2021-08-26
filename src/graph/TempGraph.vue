@@ -53,7 +53,6 @@ import VueSlider from 'vue-slider-component';
 import LineChart from './Chart.vue';
 import 'vue-slider-component/theme/antd.css';
 
-
 export default {
   name: 'TempGraph',
   components: { LineChart, VueSlider },
