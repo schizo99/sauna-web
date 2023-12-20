@@ -9,8 +9,12 @@ app.use(history({ index: '/index.html' }));
 app.get('/api/*', (req, res) => {
   const api = req.url.split('/api').slice(1).join('');
   const host = process.env.API_HOST || 'localhost';
-  axios.get(`http://${host}:3000${api}`)
-    .then((result) => res.json(result.data))
+  console.log(host)
+  axios.get(`http://${host}${api}`)
+    .then((result) =>{
+      result = result.data.filter((item) => item.temp != null)
+      return res.json(result)
+    })
     .catch(() => {
       console.log('Unable to reach API server!');
       res.status(400);
