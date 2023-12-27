@@ -1,15 +1,16 @@
-FROM node:16-alpine as build-stage
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY package*.json .
+RUN npm ci
 COPY . .
 RUN npm run build
+RUN npm prune --production
 
-# production stage
-FROM node:16-alpine as production-stage
-COPY --from=build-stage /app/dist /dist
-COPY server.json package.json
-COPY server.js ./
-RUN npm install
-EXPOSE 8080
-CMD ["npm", "run", "start"]
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/build build/
+COPY --from=builder /app/node_modules node_modules/
+COPY package.json .
+EXPOSE 3000
+ENV NODE_ENV=production
+CMD [ "node", "build" ]
