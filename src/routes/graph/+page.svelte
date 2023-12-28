@@ -13,6 +13,11 @@
 	let setzoom = 1;
 
 	async function getTemps(days, hours) {
+		let trim;
+		if (days < 0) {
+			days = 1;
+			trim = true;
+		}
 		let result = await fetch('/api/temps', {
 			method: 'POST',
 			body: JSON.stringify({ days, hours }),
@@ -22,12 +27,17 @@
 		}).then((r) => r.json());
 
 		result = result.filter((item) => item.temp != null);
+		if (trim) {
+			result = result.filter((item) => {
+				return parseISO(item.time) > subHours(new Date(), 6);
+			});
+		}
 		return result;
 	}
 	let chart;
 	onMount(async () => {
 		if (browser) {
-			temps = await getTemps(2, 24).then((result) => {
+			temps = await getTemps(-1, 24).then((result) => {
 				return result.map((d) => ({
 					y: d.temp / 100,
 					x: format(parseISO(d.time), 'yyyy-MM-dd HH:mm')
@@ -89,7 +99,8 @@
 	function zoom(days) {
 		setzoom += days;
 		if (setzoom <= 1) {
-			setzoom = 1;
+			console.log('zooming out');
+			setzoom = -1;
 		}
 		getTemps(setzoom, 24).then((result) => {
 			let chart = Chart.getChart(lineChartElement);
@@ -103,7 +114,7 @@
 		});
 	}
 	function reset() {
-		setzoom = 1;
+		setzoom = -1;
 		zoom(0);
 	}
 </script>
