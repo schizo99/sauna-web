@@ -10,11 +10,11 @@
 	Chart.register(...registerables);
 	let lineChartElement;
 	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
-	let setzoom = 1;
+	let setzoom = 0;
 
 	async function getTemps(days, hours) {
 		let trim;
-		if (days < 0) {
+		if (days <= 0) {
 			days = 1;
 			trim = true;
 		}
@@ -47,7 +47,9 @@
 				datasets: [
 					{
 						spanGaps: true,
-						borderColor: 'rgb(75, 192, 192)',
+						borderColor: 'rgb(15, 92, 92)',
+						//backgroundColor: 'rgb(15, 92, 92)',
+						color: 'rgb(15, 92, 92)',
 						lineTension: 0.5,
 						borderWidth: 2,
 						pointBorderWidth: 0.4,
@@ -78,6 +80,16 @@
 					// maintainAspectRatio: false,
 					scales: {
 						x: {
+							grid: {
+								color: 'rgb(0,0,0)',
+								lineWidth: 0.5,
+							},
+							ticks: {
+								color: 'rgb(0,0,0)',
+							},
+							border: {
+								color: 'rgb(0,0,0)',
+							},
 							type: 'time',
 							time: {
 								unit: 'hour',
@@ -90,6 +102,18 @@
 									hour: 'HH'
 								}
 							}
+						},
+						y: {
+							grid: {
+								color: 'rgb(0,0,0)',
+								lineWidth: 0.5,
+							},
+							ticks: {
+								color: 'rgb(0,0,0)',
+							},
+							border: {
+								color: 'rgb(0,0,0)',
+							},
 						}
 					}
 				}
@@ -97,11 +121,10 @@
 		}
 	});
 	function zoom(days) {
-		setzoom += days;
-		if (setzoom <= 1) {
-			console.log('zooming out');
-			setzoom = -1;
+		if (setzoom < -1) {
+			setzoom = 0;
 		}
+		setzoom += days;
 		getTemps(setzoom, 24).then((result) => {
 			let chart = Chart.getChart(lineChartElement);
 			const temp = result.map((d) => ({
@@ -150,3 +173,14 @@
 		{/each}
 	</ul> -->
 </div>
+
+<style>
+	button {
+		background-color: #424242;
+		color: rgb(198, 196, 196);
+		border: 1px solid gray;
+		border-radius: 5px;
+		padding: 5px;
+		margin: 5px;
+	}
+</style>
