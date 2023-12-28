@@ -8,15 +8,25 @@
 	let temp;
 	let focused = false;
 	let color = 'yellow';
+	let time_called = false;
+
+	function setcolor() {
+
+		if (temp[0].temp < 5000) color = 'yellow';
+			else if (temp[0].temp < 8000) color = 'rgb(200, 100, 0)';
+			else color = 'red';
+	}
+
 	async function time() {
 		if (focused) {
 			refresh();
-			if (temp[0].temp < 5000) color = 'yellow';
-			else if (temp[0].temp < 8000) color = 'orange';
-			else color = 'red';
-			console.log(color);
+			setcolor();
 		}
-		setTimeout(time, 5000);
+		if (!time_called) {
+			time_called = true;
+			setInterval(time, 5000);
+			return;
+		}
 	}
 
 	onMount(() => {
@@ -29,6 +39,7 @@
 			});
 
 			temp = data.temp;
+			setcolor();
 			time();
 		}
 	});
@@ -48,7 +59,6 @@
 	<meta name="description" content="Sauna temp" />
 </svelte:head>
 
-<div class="kalle">
 	<div class="temperature">
 		<section class="temp">
 			<span class="tempbg">
@@ -69,7 +79,7 @@
 			</span>
 		</section>
 	</div>
-</div>
+
 
 <style>
 	.text-column {
@@ -79,30 +89,27 @@
 	.temp {
 		font-size: 26px;
 		text-align: center;
-		/* color: white; */
+		color: gray;
 	}
 	.tempbg {
-		background-color: darkgray;
+		background-color: #222222;
 	}
 	.time {
 		padding-top: 10px;
 		font-size: 14px;
 		text-align: center;
-		/* color: white; */
+		color: gray;
 	}
 	.timebg {
-		background-color: darkgray;
+		background-color: #222222;
 	}
 	.temperature {
 		margin: auto;
-		background-color: darkgrey;
+		background-color: #222222;
 		padding: 5vh 7vw 5vh 7vw;
 		border-radius: 10px;
 		width: fit-content;
-		
+		vertical-align: bottom;
 	}
-	/* .kalle {
-		margin: 20px 0px 20px 0px;
-		vertical-align: center;
-	} */
+
 </style>
