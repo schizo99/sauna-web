@@ -44,8 +44,8 @@
 </script>
 
 <svelte:head>
-	<title>Graph</title>
-	<meta name="description" content="About this app" />
+	<title>Sauna thermometer</title>
+	<meta name="description" content="Sauna temp" />
 </svelte:head>
 
 <div class="kalle">
