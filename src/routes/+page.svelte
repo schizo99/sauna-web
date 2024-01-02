@@ -58,7 +58,9 @@
 	<title>Sauna thermometer</title>
 	<meta name="description" content="Sauna temp" />
 </svelte:head>
+	<center>
 
+	
 	<div class="temperature">
 		<section class="temp">
 			<span class="tempbg">
@@ -79,8 +81,22 @@
 			</span>
 		</section>
 	</div>
-
-
+	<div class="counts">
+		<section class="first">
+			<span class="firstbg">
+				{#if data.starts}
+				<span class="count">Count:</span> <span class="countnr">{data.starts.length}</span>
+				<br>
+					<span class="start">First start:</span> <span>{format(parseISO(data.starts[0].time), 'yyyy-MM-dd')}</span>
+					<br>
+					<span class="start">Last start:</span> <span>{format(parseISO(data.starts[data.starts.length - 1].time), 'yyyy-MM-dd')}</span>
+				{:else}
+					Loading...
+				{/if}
+			</span>
+		</section>
+	</div>
+</center>
 <style>
 	.text-column {
 		width: min(100% - var(--spacing-12), var(--max-width-wrapper));
@@ -100,15 +116,45 @@
 		text-align: center;
 		color: gray;
 	}
+	.first {
+		padding-top: 10px;
+		font-size: 14px;
+		text-align: center;
+		color: gray;
+	}
+	.start {
+		color: rgb(90,90,90);
+	}
+	.count {
+		font-size: 26px;
+	}
+	.countnr {
+		font-size: 26px;
+		color: whitesmoke;
+	}
 	.timebg {
 		background-color: #222222;
 	}
 	.temperature {
-		margin: auto;
+		/* margin: auto; */
+		/* margin-left: center; */
 		background-color: #222222;
 		padding: 5vh 7vw 5vh 7vw;
 		border-radius: 10px;
-		width: fit-content;
+		/* width: 25vw; */
+		vertical-align: bottom;
+		max-width: 160px;
+		margin-top: 15vh;
+		margin-bottom: 5px;
+	}
+	.counts {
+		margin-top: 5px;
+		background-color: #222222;
+		padding: 5vh 7vw 5vh 7vw;
+		border-radius: 10px;
+		max-width: 160px;
+		/* width: 25vw; */
+		
 		vertical-align: bottom;
 	}
 
