@@ -12,8 +12,9 @@
 
 	function setcolor() {
 
-		if (temp[0].temp < 5000) color = 'yellow';
-			else if (temp[0].temp < 8000) color = 'rgb(200, 100, 0)';
+		if (temp[0].temp < 1000) color = 'rgb(50,50,250)';
+			else if (temp[0].temp < 4000) color = 'yellow';
+			else if (temp[0].temp < 7000) color = 'rgb(200, 100, 0)';
 			else color = 'red';
 	}
 
@@ -139,22 +140,19 @@
 		/* margin: auto; */
 		/* margin-left: center; */
 		background-color: #222222;
-		padding: 5vh 7vw 5vh 7vw;
-		border-radius: 10px;
-		/* width: 25vw; */
+		padding: 4vh 3vw 4vh 3vw;
+		border-radius: 15px;
 		vertical-align: bottom;
-		max-width: 160px;
-		margin-top: 15vh;
+		max-width: 200px;
+		margin-top: 18vh;
 		margin-bottom: 5px;
 	}
 	.counts {
 		margin-top: 5px;
 		background-color: #222222;
-		padding: 5vh 7vw 5vh 7vw;
-		border-radius: 10px;
-		max-width: 160px;
-		/* width: 25vw; */
-		
+		padding: 2vh 3vw 4vh 3vw;
+		border-radius: 15px;
+		max-width: 200px;
 		vertical-align: bottom;
 	}
 
