@@ -5,7 +5,7 @@ export async function load(event) {
 		temp: await event.fetch(`/api/temps`,
 			{
 				method: 'POST',
-				body: JSON.stringify({ days: 1, hours: 24 }),
+				body: JSON.stringify({ days: 1, hours: 6 }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
