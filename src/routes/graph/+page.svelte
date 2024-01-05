@@ -9,6 +9,7 @@
 	let focused = false;
 	Chart.register(...registerables);
 	let lineChartElement;
+	export let data;
 	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
 	let setzoom = 0;
 
@@ -36,13 +37,12 @@
 	}
 	let chart;
 	onMount(async () => {
-		if (browser) {
-			temps = await getTemps(-1, 24).then((result) => {
-				return result.map((d) => ({
+			temps = data.temp.filter((item) => {
+				return parseISO(item.time) > subHours(new Date(), 6);
+			}).map((d) => ({
 					y: d.temp / 100,
 					x: format(parseISO(d.time), 'yyyy-MM-dd HH:mm')
-				}));
-			});
+			}));
 			let chartdata = {
 				datasets: [
 					{
@@ -119,7 +119,7 @@
 				}
 			});
 		}
-	});
+	);
 	function zoom(days) {
 		if (setzoom < -1) {
 			setzoom = 0;
