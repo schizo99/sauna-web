@@ -53,7 +53,8 @@
 		temp = result;
 	}
 	function getTemperature() {
-		if (temp > 0) return temp[0].temp / 100 + 5;
+		if (temp > 100) return 100;
+		else if (temp > 0) return temp[0].temp / 100;
 		else return 0;
 	}
 </script>
@@ -123,6 +124,7 @@
 	.kalle {
 		display: flex;
 		justify-content: center;
+		padding-top: 15vh;
 	}
 	.left {
 		display: flex;
@@ -130,8 +132,9 @@
 	}
 
 	.right {
-		padding-top: 18vh;
+		padding-top: 78px;
 		padding-left: 20px;
+		padding-bottom: 2px;
 	}
 	.text-column {
 		width: min(100% - var(--spacing-12), var(--max-width-wrapper));
@@ -140,7 +143,9 @@
 	.temp {
 		font-size: 26px;
 		text-align: center;
+		padding-top: 30px;
 		color: gray;
+		width: 100%;
 	}
 	.tempbg {
 		background-color: #222222;
@@ -152,7 +157,7 @@
 		color: gray;
 	}
 	.first {
-		padding-top: 10px;
+		padding-top: 25px;
 		font-size: 14px;
 		text-align: center;
 		color: gray;
@@ -174,33 +179,35 @@
 		/* margin: auto; */
 		/* margin-left: center; */
 		background-color: #222222;
-		padding: 4vh 3vw 4vh 3vw;
+		//padding: 20px 75px 20px 75px;
 		border-radius: 15px;
 		vertical-align: bottom;
-		max-width: 200px;
-		margin-top: 18vh;
+		width: 220px;
+		margin-top: 80px;
 		margin-bottom: 5px;
+		height: 120px;
 	}
 	.counts {
 		margin-top: 5px;
 		background-color: #222222;
-		padding: 2vh 3vw 4vh 3vw;
+		//padding: 10px 75px 25px 75px;
 		border-radius: 15px;
-		max-width: 200px;
 		vertical-align: bottom;
+		height: 120px;
+		width: 220px;
 	}
 
 	$TM-mainTint: #3d3d44;
 	$TM-backgroundColor: darken($TM-mainTint, 2%);
-	$TM-borderSize: 9px;
+	$TM-borderSize: 7px;
 	$TM-borderColor: darken($TM-mainTint, 8%);
 	$TM-width: 20px;
 	$TM-bulbSize: calc($TM-width * 2);
-	$TM-height: calc(100% - calc($TM-bulbSize + 7px));
+	$TM-height: 210px;
 	$TM-radius: 20px;
 	$TM-graduationsStyle: 2px solid rgba(0, 0, 0, 0.5);
 	$TM-bulbColor: #162bc8;
-	$TM-mercuryColor: linear-gradient(#dc0505, #f87408, #f8f407, #06d93a, $TM-bulbColor) no-repeat
+	$TM-mercuryColor: linear-gradient(#ec0505,#dc0505, #f87408,#f8b007, #f8f407, #e8e407, #06d93a, $TM-bulbColor) no-repeat
 		bottom;
 
 	// Tooltip
@@ -254,7 +261,7 @@
 			width: $TM-bulbSize;
 			height: $TM-bulbSize;
 			background-color: $TM-bulbColor;
-			bottom: -$TM-bulbSize + $TM-borderSize - 10;
+			bottom: -$TM-bulbSize + $TM-borderSize - 5;
 			@include border;
 			z-index: -3;
 			left: 50%;
