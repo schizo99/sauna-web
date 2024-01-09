@@ -6,17 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
+      - uses: actions/checkout@v2
+      - name: Set up WireGuard Connection
+        uses: niklaskeerl/easy-wireguard-action@v2
         with:
-          endpoint: ${{ secrets.ENDPOINT }}
-          endpoint_public_key: ${{ secrets.ENDPOINT_PUBLIC_KEY }}
-          ips: ${{ secrets.IPS }}
-          allowed_ips: ${{ secrets.ALLOWED_IPS }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-      - name: Run a test
+          WG_CONFIG_FILE: ${{ secrets.WG_CONFIG_FILE }}
+      - name: test
         run: |
-          ip addr
-          ip route
           ping -c 4 192.168.101.223
