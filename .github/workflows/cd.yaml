@@ -12,7 +12,6 @@ jobs:
           #sudo apt install resolvconf
           sudo apt install wireguard
           echo "${{ secrets.WG_CONFIG_FILE }}" > wg0.conf
-          cat wg0.conf
           sudo chmod 600 wg0.conf
           sudo wg-quick up ./wg0.conf
           ip a
