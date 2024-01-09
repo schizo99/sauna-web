@@ -4,7 +4,7 @@ on:
       - cicd
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up WireGuard Connection
@@ -13,4 +13,7 @@ jobs:
           WG_CONFIG_FILE: ${{ secrets.WG_CONFIG_FILE }}
       - name: test
         run: |
+          sudo ip link set up dev wg0
+          ip a
+          ip r
           ping -c 4 192.168.101.223
