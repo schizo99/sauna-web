@@ -53,8 +53,8 @@
 		temp = result;
 	}
 	function getTemperature() {
-		if (temp > 100) return 100;
-		else if (temp > 0) return temp[0].temp / 100;
+		if (temp[0].temp > 10000) return 100;
+		else if (temp[0].temp > 0) return temp[0].temp / 100;
 		else return 0;
 	}
 </script>
