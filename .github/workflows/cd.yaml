@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - cicd
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+        with:
+          endpoint: ${{ secrets.ENDPOINT }}
+          endpoint_public_key: ${{ secrets.ENDPOINT_PUBLIC_KEY }}
+          ips: ${{ secrets.IPS }}
+          allowed_ips: ${{ secrets.ALLOWED_IPS }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - name: Run a test
+        run: |
+          ip addr
+          ip route
+          ping -c 192.168.101.223
