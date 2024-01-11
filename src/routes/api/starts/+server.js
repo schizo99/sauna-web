@@ -1,14 +1,15 @@
-import { json } from '@sveltejs/kit';
-import process from 'process';
-const host = process.env.API_HOST || 'localhost';
+import influx from '$lib/influx';
+
 /** @type {import('./$types').RequestHandler} */
-export async function GET({ params, fetch }) 
-{
-    return await fetch(`http://${host}/starts/`,
-			{
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
+export async function GET({ params, fetch }) {
+    let result = await influx.query(`
+    SELECT LAST("temp") AS last_temp
+    FROM "temperatures" WHERE "temp" >= 7000
+    GROUP BY time(1d) fill(none)
+  `).catch(err => {
+        console.log(err)
+        return "bajs"
+    })
+
+    return new Response(JSON.stringify(result))
 }
