@@ -1,60 +1,39 @@
 <script>
-	import { browser } from '$app/environment';
 	import '$lib/styles/global.css';
 	// import '@fontsource/merriweather';
 	import { onMount } from 'svelte';
 	import { parseISO, format, addHours, subHours, set } from 'date-fns';
 	export let data;
-	let temp;
-	let focused = false;
-	let color = 'yellow';
-	let time_called = false;
 
+	let color = 'yellow';
+
+	$: setcolor();
 	function setcolor() {
-		if (temp[0].temp < 1000) color = 'rgb(50,50,250)';
-		else if (temp[0].temp < 4000) color = 'yellow';
-		else if (temp[0].temp < 7000) color = 'rgb(200, 100, 0)';
+		if (data.temp[0].temp < 1000) color = 'rgb(50,50,250)';
+		else if (data.temp[0].temp < 4000) color = 'yellow';
+		else if (data.temp[0].temp < 7000) color = 'rgb(200, 100, 0)';
 		else color = 'red';
 	}
 
-	async function time() {
-		if (focused) {
-			refresh();
-			setcolor();
-		}
-		if (!time_called) {
-			time_called = true;
-			setInterval(time, 5000);
-			return;
-		}
-	}
-
 	onMount(() => {
-		if (browser) {
-			window.addEventListener('focus', async () => {
-				focused = true;
-			});
-			window.addEventListener('blur', async () => {
-				focused = false;
-			});
-
-			temp = data.temp;
-			setcolor();
-			time();
-		}
+		refresh();
+		const interval = setInterval(refresh, 5000);
+		return () => clearInterval(interval);
 	});
+
 	async function refresh() {
-		let result = await fetch('/api/get', {
+		let result = await fetch('/gettemp', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		}).then((r) => r.json());
-		temp = result;
+		data = result;
 	}
 	function getTemperature() {
-		if (temp[0].temp > 10000) return 100;
-		else if (temp[0].temp > 0) return temp[0].temp / 100;
+		if (!data.temp) return 0;
+		if (data.temp[0].temp > 10000) return 100;
+		else if (data.temp[0].temp > 0) return data.temp[0].temp / 100;
 		else return 0;
 	}
 </script>
@@ -69,8 +48,8 @@
 		<div class="temperature">
 			<section class="temp">
 				<span class="tempbg">
-					{#if temp}
-						<span>Temp:</span> <span style:color>{temp[0].temp / 100}°C</span>
+					{#if data}
+						<span>Temp:</span> <span style:color>{data.temp[0].temp / 100}°C</span>
 					{:else}
 						Loading...
 					{/if}
@@ -78,8 +57,8 @@
 			</section>
 			<section class="time">
 				<span class="timebg">
-					{#if temp}
-						Time: {format(parseISO(temp[0].time), 'yyyy-MM-dd HH:mm')}
+					{#if data}
+						Time: {format(parseISO(data.temp[0].time), 'yyyy-MM-dd HH:mm')}
 					{:else}
 						Loading...
 					{/if}
@@ -106,10 +85,10 @@
 	</div>
 	<div class="right">
 		<div id="termometer">
-			{#if temp}
+			{#if data.temp}
 				<div
 					id="temperature"
-					data-value={temp[0].temp / 100}
+					data-value={data.temp[0].temp / 100}
 					style="height: {getTemperature()}%"
 				></div>
 			{:else}
@@ -207,8 +186,17 @@
 	$TM-radius: 20px;
 	$TM-graduationsStyle: 2px solid rgba(0, 0, 0, 0.5);
 	$TM-bulbColor: #162bc8;
-	$TM-mercuryColor: linear-gradient(#ec0505,#dc0505, #f87408,#f8b007, #f8f407, #e8e407, #06d93a, $TM-bulbColor) no-repeat
-		bottom;
+	$TM-mercuryColor: linear-gradient(
+			#ec0505,
+			#dc0505,
+			#f87408,
+			#f8b007,
+			#f8f407,
+			#e8e407,
+			#06d93a,
+			$TM-bulbColor
+		)
+		no-repeat bottom;
 
 	// Tooltip
 
