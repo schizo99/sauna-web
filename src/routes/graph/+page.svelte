@@ -9,22 +9,18 @@
 	export let form;
 	let chartData = [];
 	$: chartData = zoom != 0 ? form?.temp || data?.temp : data?.temp;
-	$: visible = true;
 	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
 	let formElement;
 	let zoom = 0;
 	//$: console.log(data);
 	//$: form && console.log(form);
 	function handleClick(e) {
-		visible = false;
-		setTimeout(() => {visible = true;}, 300);
 		if (e.srcElement.innerText == 'Reset') {
 			zoom = 0;
 		} else {
 			zoom += Number(e.srcElement.innerText);
 			if (zoom < 0) zoom = 0;
 		}
-		formElement.requestSubmit();
 	}
 </script>
 
@@ -37,7 +33,7 @@
 	<h1>Sauna Temperature History</h1>
 
 	<section>
-		<form bind:this={formElement} action="?/getdays" method="POST" use:enhance>
+		<form action="?/getdays" method="POST" use:enhance>
 			<input type="hidden" name="days" value={zoom} />
 			<button on:click={handleClick}>5</button>
 			<button on:click={handleClick}>1</button>
