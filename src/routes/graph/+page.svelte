@@ -1,19 +1,23 @@
 <script>
 	import { browser } from '$app/environment';
+	import { fade, blur } from 'svelte/transition';
 	import { enhance } from '$app/forms';
 	import '$lib/styles/global.css';
 	import LineChart from './LineChart.svelte';
-
+	let visible = true;
 	export let data;
 	export let form;
 	let chartData = [];
-	$: chartData = form?.temp || data?.temp;
+	$: chartData = zoom != 0 ? form?.temp || data?.temp : data?.temp;
+	$: visible = true;
 	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
 	let formElement;
 	let zoom = 0;
 	//$: console.log(data);
 	//$: form && console.log(form);
 	function handleClick(e) {
+		visible = false;
+		setTimeout(() => {visible = true;}, 300);
 		if (e.srcElement.innerText == 'Reset') {
 			zoom = 0;
 		} else {
@@ -26,11 +30,12 @@
 
 <svelte:head>
 	<title>Graph</title>
-	<meta name="description" content="About this app" />
+	<meta name="description" content="Temperature graph" />
 </svelte:head>
 
 <div>
 	<h1>Sauna Temperature History</h1>
+
 	<section>
 		<form bind:this={formElement} action="?/getdays" method="POST" use:enhance>
 			<input type="hidden" name="days" value={zoom} />
@@ -42,7 +47,12 @@
 		</form>
 	</section>
 	<section>
-		<LineChart data={chartData} />
+		{#if visible}
+		<div transition:fade={{ delay: 0, duration: 150 }}>
+
+			<LineChart data={chartData} />
+		</div>
+		{/if}
 	</section>
 	<!-- <ul>
 		{#each data.temps as temp}
