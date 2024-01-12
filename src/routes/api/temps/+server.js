@@ -9,9 +9,9 @@ export async function POST({ request, fetch }) {
         days = 1;
         timePeriod = `6h`;
     }
-    const aggregation = 10 * days;
+    const aggregation = 200 * days;
     let result = await influx.query(`
-    SELECT FIRST(temp) as temp
+    SELECT MAX(temp) as temp
 	FROM temperatures where time > now() - ${timePeriod}
 	GROUP BY time(${aggregation}s) fill(none)
   `).catch(err => {
