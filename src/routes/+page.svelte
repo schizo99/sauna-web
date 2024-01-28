@@ -6,12 +6,17 @@
 	export let data;
 
 	let color = 'yellow';
-
+	let temperature = 0;
 	$: setcolor();
+	$: getTemperature();
 	function setcolor() {
-		if (data.temp[0].temp < 1000) color = 'rgb(50,50,250)';
-		else if (data.temp[0].temp < 4000) color = 'yellow';
-		else if (data.temp[0].temp < 7000) color = 'rgb(200, 100, 0)';
+		if (data.temp[0].temp < 500) color = 'rgb(50,50,250)';
+		if (data.temp[0].temp < 7500) color = '#ec0505';
+		if (data.temp[0].temp < 6500) color = '#dc0505';
+		if (data.temp[0].temp < 5000) color = '#f87408';
+		if (data.temp[0].temp < 4000) color = '#f8b007';
+		if (data.temp[0].temp < 3000) color = '#f8f407';
+		if (data.temp[0].temp < 2000) color = '#06d93a';
 		else color = 'red';
 	}
 
@@ -31,10 +36,10 @@
 		data = result;
 	}
 	function getTemperature() {
-		if (!data.temp) return 0;
-		if (data.temp[0].temp > 10000) return 100;
-		else if (data.temp[0].temp > 0) return data.temp[0].temp / 100;
-		else return 0;
+		if (!data.temp) temperature = 0;
+		if (data.temp[0].temp > 9000) temperature = 100;
+		else if (data.temp[0].temp > 0) temperature = data.temp[0].temp / 90;
+		else temperature = 0;
 	}
 </script>
 
@@ -89,7 +94,7 @@
 				<div
 					id="temperature"
 					data-value={data.temp[0].temp / 100}
-					style="height: {getTemperature()}%"
+					style="height: {temperature}%"
 				></div>
 			{:else}
 				<div id="temperature" data-value="0"></div>
@@ -114,10 +119,6 @@
 		padding-top: 78px;
 		padding-left: 20px;
 		padding-bottom: 2px;
-	}
-	.text-column {
-		width: min(100% - var(--spacing-12), var(--max-width-wrapper));
-		margin: var(--spacing-18) auto;
 	}
 	.temp {
 		font-size: 26px;
