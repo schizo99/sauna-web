@@ -11,15 +11,14 @@
 	$: getTemperature();
 	function setcolor() {
 		if (data.temp[0].temp < 500) color = 'rgb(50,50,250)';
-		if (data.temp[0].temp < 7500) color = '#ec0505';
-		if (data.temp[0].temp < 6500) color = '#dc0505';
-		if (data.temp[0].temp < 5000) color = '#f87408';
-		if (data.temp[0].temp < 4000) color = '#f8b007';
-		if (data.temp[0].temp < 3000) color = '#f8f407';
-		if (data.temp[0].temp < 2000) color = '#06d93a';
+		else if (data.temp[0].temp < 2000) color = '#06d93a';
+		else if (data.temp[0].temp < 3000) color = '#f8f407';
+		else if (data.temp[0].temp < 4000) color = '#f8b007';
+		else if (data.temp[0].temp < 5000) color = '#f87408';
+		else if (data.temp[0].temp < 6500) color = '#dc0505';
+		else if (data.temp[0].temp < 7500) color = '#ec0505';
 		else color = 'red';
 	}
-
 	onMount(() => {
 		refresh();
 		const interval = setInterval(refresh, 5000);
