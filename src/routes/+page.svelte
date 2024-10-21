@@ -7,19 +7,15 @@
 
 	let color = 'yellow';
 	let temperature = 0;
+	let gradientString = '';
 	$: setcolor();
 	$: getTemperature();
 	function setcolor() {
-		if (data.temp[0].temp < 500) color = 'rgb(50,50,250)';
-		else if (data.temp[0].temp < 2000) color = '#06d93a';
-		else if (data.temp[0].temp < 3000) color = '#f8f407';
-		else if (data.temp[0].temp < 4000) color = '#f8b007';
-		else if (data.temp[0].temp < 5000) color = '#f87408';
-		else if (data.temp[0].temp < 6500) color = '#dc0505';
-		else if (data.temp[0].temp < 7500) color = '#ec0505';
-		else color = 'red';
+		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 	}
 	onMount(() => {
+		gradientString = getComputedStyle(document.getElementById('temperature')).background;
+		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 		refresh();
 		const interval = setInterval(refresh, 5000);
 		return () => clearInterval(interval);
@@ -40,6 +36,51 @@
 		else if (data.temp[0].temp > 0) temperature = data.temp[0].temp / 90;
 		else temperature = 0;
 	}
+	function getColorAtPercentageVertical(percentage) {
+            // Extract the 'linear-gradient' part using a regex
+			const gradientMatch = gradientString.match(/linear-gradient\((.*)\)/);
+            if (!gradientMatch) {
+                console.error("Invalid gradient string.");
+                return null;
+            }
+
+            // Get the color stops inside the linear-gradient function
+            const gradient = gradientMatch[1];
+
+            // Create an off-screen canvas
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            // Set canvas dimensions (100px height, 1px width for vertical gradient)
+            canvas.width = 1;
+            canvas.height = 100;
+
+            // Create the linear gradient for the canvas
+            const canvasGradient = context.createLinearGradient(0, canvas.height,0,0);
+
+            // Parse the color stops from the gradient string
+            const stopMatches = [...gradient.matchAll(/(rgba?\([^)]+\)|#[0-9a-fA-F]+|[a-zA-Z]+)/g)];
+            if (!stopMatches.length) {
+                console.error("Failed to parse the gradient.");
+                return null;
+            }
+
+            // Apply the color stops to the canvas gradient
+            stopMatches.forEach((stop, index) => {
+                canvasGradient.addColorStop(index / (stopMatches.length - 1), stop[0]);
+            });
+
+            // Fill the canvas with the gradient
+            context.fillStyle = canvasGradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Get the pixel color at the specific percentage position (Y-axis)
+            const y = Math.round(canvas.height * (percentage / 100));
+            const pixelData = context.getImageData(0, y, 1, 1).data;
+
+			// Convert the pixel data to a CSS rgba color
+            return `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
+        }
 </script>
 
 <svelte:head>
