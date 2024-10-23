@@ -9,7 +9,10 @@
 	let temperature = 0;
 	let gradientString = '';
 	$: setcolor();
-	$: getTemperature();
+	$: () => {
+		if (data.temp[0].temp) temperature = data.temp[0].temp / 100;
+		else temperature = 0;
+	};
 	function setcolor() {
 		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 	}
@@ -30,12 +33,7 @@
 		}).then((r) => r.json());
 		data = result;
 	}
-	function getTemperature() {
-		if (!data.temp) temperature = 0;
-		if (data.temp[0].temp > 9000) temperature = 100;
-		else if (data.temp[0].temp > 0) temperature = data.temp[0].temp / 90;
-		else temperature = 0;
-	}
+
 	function getColorAtPercentageVertical(percentage) {
             // Extract the 'linear-gradient' part using a regex
 			const gradientMatch = gradientString.match(/linear-gradient\((.*)\)/);
@@ -94,7 +92,7 @@
 			<section class="temp">
 				<span class="tempbg">
 					{#if data}
-						<span>Temp:</span> <span style:color>{data.temp[0].temp / 100}°C</span>
+						<span>Temp:</span> <span style:color>{temperature}°C</span>
 					{:else}
 						Loading...
 					{/if}
@@ -133,7 +131,7 @@
 			{#if data.temp}
 				<div
 					id="temperature"
-					data-value={data.temp[0].temp / 100}
+					data-value={temperature}
 					style="height: {temperature}%"
 				></div>
 			{:else}
