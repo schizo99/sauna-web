@@ -144,6 +144,7 @@
 </div>
 
 <style lang="scss">
+	@use "sass:color";
 	.kalle {
 		display: flex;
 		justify-content: center;
@@ -217,9 +218,9 @@
 	}
 
 	$TM-mainTint: #3d3d44;
-	$TM-backgroundColor: darken($TM-mainTint, 2%);
+	$TM-backgroundColor: color.adjust($TM-mainTint, $lightness: -2%);
 	$TM-borderSize: 7px;
-	$TM-borderColor: darken($TM-mainTint, 8%);
+	$TM-borderColor: color.adjust($TM-mainTint, $lightness: -8%);
 	$TM-width: 20px;
 	$TM-bulbSize: calc($TM-width * 2);
 	$TM-height: 210px;
