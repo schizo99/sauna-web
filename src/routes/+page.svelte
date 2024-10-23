@@ -9,10 +9,7 @@
 	let temperature = 0;
 	let gradientString = '';
 	$: setcolor();
-	$: () => {
-		if (data.temp[0].temp) temperature = data.temp[0].temp / 100;
-		else temperature = 0;
-	};
+	$: getTemperature();
 	function setcolor() {
 		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 	}
