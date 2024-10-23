@@ -9,10 +9,7 @@
 	let temperature = 0;
 	let gradientString = '';
 	$: setcolor();
-	$: () => {
-		if (data.temp[0].temp) temperature = data.temp[0].temp / 100;
-		else temperature = 0;
-	};
+	$: getTemperature();
 	function setcolor() {
 		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 	}
@@ -34,6 +31,10 @@
 		data = result;
 	}
 
+	function getTemperature() {
+		if (data.temp[0].temp) temperature = data.temp[0].temp / 100;
+		else temperature = 0;
+	}
 	function getColorAtPercentageVertical(percentage) {
             // Extract the 'linear-gradient' part using a regex
 			const gradientMatch = gradientString.match(/linear-gradient\((.*)\)/);
