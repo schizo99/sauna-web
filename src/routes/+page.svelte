@@ -1,35 +1,53 @@
 <script>
 	import '$lib/styles/global.css';
 	// import '@fontsource/merriweather';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy} from 'svelte';
 	import { parseISO, format, addHours, subHours, set } from 'date-fns';
+	import { browser } from '$app/environment';
 	export let data;
 
-	let color = 'yellow';
+	let color;
 	let temperature = 0;
 	let gradientString = '';
+	let eventSource;
 	$: setcolor();
 	$: getTemperature();
 	function setcolor() {
 		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
 	}
+
+	function startSSE() {
+		// Replace 'Bearer YOUR_TOKEN' with your actual authorization token
+		eventSource = new EventSource(`/data-stream`);
+
+		eventSource.onmessage = async (event) => {
+			data = JSON.parse(event.data);
+		};
+
+		eventSource.onerror = () => {
+			console.log('SSE connection error, attempting to reconnect...');
+			eventSource.close();
+			setTimeout(startSSE, 5000); // Retry connection after a delay
+		};
+	}
+
 	onMount(() => {
+		startSSE();
 		gradientString = getComputedStyle(document.getElementById('temperature')).background;
 		if (gradientString != '') color = getColorAtPercentageVertical(temperature);
-		refresh();
-		const interval = setInterval(refresh, 5000);
-		return () => clearInterval(interval);
-	});
-
-	async function refresh() {
-		let result = await fetch('/gettemp', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible' && eventSource.readyState === EventSource.CLOSED) {
+				startSSE();
 			}
-		}).then((r) => r.json());
-		data = result;
-	}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+	});
+	onDestroy(() => {
+		if (eventSource) eventSource.close();
+		if (browser) document.removeEventListener('visibilitychange', handleVisibilityChange);
+	});
 
 	function getTemperature() {
 		if (data.temp[0].temp) temperature = data.temp[0].temp / 100;
@@ -144,7 +162,7 @@
 </div>
 
 <style lang="scss">
-	@use "sass:color";
+	@use 'sass:color';
 	.kalle {
 		display: flex;
 		justify-content: center;
