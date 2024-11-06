@@ -30,7 +30,7 @@
     let startOffset = Math.max(0, cappedPercentage - 5);
     let endOffset = Math.min(90, cappedPercentage + 5);
     let labelOffset = Math.min(90, cappedPercentage + 10);
-
+    document.documentElement.style.setProperty('--temp-color', getSingleColor(percentage));
     return {
       singleColor: getSingleColor(percentage),
       percentage,
@@ -99,7 +99,7 @@
   }
   .label {
     position: absolute;
-    right: -30px;
+    right: -80px;
     top: var(--offset-y);
   }
 </style>

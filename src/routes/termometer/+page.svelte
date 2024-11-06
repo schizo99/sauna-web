@@ -14,7 +14,7 @@
 
 </div>
 <div class="termo">
-  <div class="big">
+  <div class="small">
     <Termometer temperature={temp} {min} {max} {bulb}/>
   </div>
 </div>

@@ -27,7 +27,7 @@
 
 <style>
 	.dark {
-		color: rgb(90, 90, 90);
+		color: grey;
 	}
 	.tempbox {
 		/* margin: auto; */

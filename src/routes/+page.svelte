@@ -4,7 +4,7 @@
 	import Tempbox from '$lib/components/tempbox.svelte';
 	import Counts from '$lib/components/counts.svelte';
 	import Thermometer from '$lib/components/thermometer.svelte';
-
+	// import Range from '$lib/components/range.svelte';
 	let { data } = $props();
 
 	onMount(() => {
@@ -22,19 +22,26 @@
 			return 0;
 		}
 	});
+	// let temperature = $state(40);
+	let min = $state(-10);
+	let max = $state(90);
+	let bulb = $state(10);
 </script>
 
 <svelte:head>
 	<title>Sauna thermometer</title>
 	<meta name="description" content="Sauna temp" />
 </svelte:head>
+<!-- <div class="controls">
+	<Range id="temp" label="Temperature" {min} {max} bind:value={temperature} />
+</div> -->
 <div class="main">
 	<div class="left">
 		<Tempbox temp={data.temp} />
 		<Counts starts={data.starts} />
 	</div>
 	<div class="right">
-		<Thermometer temperature={temperature} max=85/>
+		<Thermometer {temperature} {min} {max} {bulb} />
 	</div>
 </div>
 
@@ -43,14 +50,14 @@
 		display: flex;
 		justify-content: center;
 		padding-top: 15vh;
-		padding-left: 15vw;
 	}
 	.left {
 		display: flex;
 		flex-direction: column;
 	}
 	.right {
-		display: flex;
+		display: inline-flex;
+		width: 75px;
 		flex-direction: column;
 		vertical-align: bottom;
 		margin-top: 80px;
