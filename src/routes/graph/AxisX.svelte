@@ -1,16 +1,22 @@
 <script>
-	// Receive x-scale, height and margins as props.
-	export let xScale;
-	export let height;
-	export let margin;
+	
 
-	// Determine ticks based on x-scale.
-	// Try changing this number to haver e.g. fewer ticks.
-	$: xTicks = xScale.ticks(10);
 
 	// Prepare a formatting function to wrangle the dates into "just years"
 	import { timeFormat } from 'd3-time-format';
+	/**
+	 * @typedef {Object} Props
+	 * @property {any} xScale - Receive x-scale, height and margins as props.
+	 * @property {any} height
+	 * @property {any} margin
+	 */
+
+	/** @type {Props} */
+	let { xScale, height, margin } = $props();
 	const timeFormatter = timeFormat('%Y-%m-%d %H:%M');
+	// Determine ticks based on x-scale.
+	// Try changing this number to haver e.g. fewer ticks.
+	let xTicks = $derived(xScale.ticks(10));
 </script>
 
 <g class="x-axis" transform="translate(0, {height - margin.bottom})">

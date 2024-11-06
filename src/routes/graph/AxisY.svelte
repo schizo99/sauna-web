@@ -1,12 +1,18 @@
 <script>
-	// Receive y-scale, width and margins as props.
-	export let yScale;
-	export let width;
-	export let margin;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {any} yScale - Receive y-scale, width and margins as props.
+	 * @property {any} width
+	 * @property {any} margin
+	 */
+
+	/** @type {Props} */
+	let { yScale, width, margin } = $props();
 
 	// Determine ticks based on y-scale.
 	// Try changing this number to haver e.g. fewer ticks.
-	$: yTicks = yScale.ticks(8);
+	let yTicks = $derived(yScale.ticks(8));
 </script>
 
 <g class="y-axis" transform="translate({margin.left}, 0)">
