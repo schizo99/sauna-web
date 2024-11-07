@@ -61,7 +61,7 @@
 <div class="group">
   <div class="label" style="--offset-y: {Math.round(labelPosition)}%">
     <Percentage>
-      {Math.round(temperature)}c
+      {temperature}c
     </Percentage>
   </div>
   <svg viewBox="0 0 265 866" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
