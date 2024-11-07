@@ -11,7 +11,6 @@ async function updateTelegramDate() {
         },
         body: JSON.stringify({ date: new Date().toISOString() })
     });
-    console.log('Telegram date updated', await req);
     let result = await req;
     if (!result.ok) {
         console.error('Failed to update telegram date', result);
@@ -66,8 +65,8 @@ const cronTask = cron.schedule("*/15 * * * * *", async () => {
         const temp = await req.json();
         if (temp[0].temp > 7500) {
             console.log("Temp is over 80 degrees");
+            checkDate();
         }
-        checkDate();
     } catch (error) {
         console.error("Error checking temp:", error);
     }
