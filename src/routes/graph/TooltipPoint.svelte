@@ -1,7 +1,13 @@
 <script>
-	export let x = 0;
-	export let y = 0;
-    export let temp = 0;
+	/**
+	 * @typedef {Object} Props
+	 * @property {number} [x]
+	 * @property {number} [y]
+	 * @property {number} [temp]
+	 */
+
+	/** @type {Props} */
+	let { x = 0, y = 0, temp = 0 } = $props();
 </script>
 
 <g>

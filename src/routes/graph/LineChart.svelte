@@ -4,9 +4,15 @@
 	import AxisY from './AxisY.svelte';
 	import AxisX from './AxisX.svelte';
 	import TooltipPoint from './TooltipPoint.svelte';
-	// Receive plot data as prop.
-	export let data;
-	let point = data[0];
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {any} data - Receive plot data as prop.
+	 */
+
+	/** @type {Props} */
+	let { data } = $props();
+	let point = $state(data[0]);
 
 	const width = 928;
 	const height = 500;
@@ -19,17 +25,17 @@
 	};
 
 	// Declare the x (horizontal position) scale.
-	$: xScale = d3
+	let xScale = $derived(d3
 		.scaleUtc()
 		.domain(d3.extent(data, (d) => new Date(d.time)))
-		.range([margin.left, width - margin.right]);
+		.range([margin.left, width - margin.right]));
 
 	// Declare the y (vertical position) scale.
-	$: yScale = d3
+	let yScale = $derived(d3
 		.scaleLinear()
 		.domain([d3.min(data, (d) => d.temp / 100 - 10), d3.max(data, (d) => d.temp / 100 + 10)])
 		// .domain([-5,10])
-		.rangeRound([height - margin.bottom, margin.top]);
+		.rangeRound([height - margin.bottom, margin.top]));
 
 	// Declare the line generator.
 	const line = d3
@@ -60,7 +66,7 @@
 	viewBox="0 0 {width} {height}"
 	style:max-width="100%"
 	style:height="auto"
-	on:mousemove={handleMousemove}
+	onmousemove={handleMousemove}
 >
 	<!-- Add the y-axis -->
 	<AxisY {yScale} {width} {margin} />

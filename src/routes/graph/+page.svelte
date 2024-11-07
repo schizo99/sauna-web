@@ -1,17 +1,17 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { browser } from '$app/environment';
 	import { fade, blur } from 'svelte/transition';
 	import { enhance } from '$app/forms';
 	import '$lib/styles/global.css';
 	import LineChart from './LineChart.svelte';
 	let visible = true;
-	export let data;
-	export let form;
-	let chartData = [];
-	$: chartData = zoom != 0 ? form?.temp || data?.temp : data?.temp;
+	let { data, form } = $props();
+	let chartData = $state([]);
 	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
 	let formElement;
-	let zoom = 0;
+	let zoom = $state(0);
 	//$: console.log(data);
 	//$: form && console.log(form);
 	function handleClick(e) {
@@ -22,6 +22,9 @@
 			if (zoom < 0) zoom = 0;
 		}
 	}
+	run(() => {
+		chartData = zoom != 0 ? form?.temp || data?.temp : data?.temp;
+	});
 </script>
 
 <svelte:head>
@@ -35,11 +38,11 @@
 	<section>
 		<form action="?/getdays" method="POST" use:enhance>
 			<input type="hidden" name="days" value={zoom} />
-			<button on:click={handleClick}>5</button>
-			<button on:click={handleClick}>1</button>
-			<button on:click={handleClick}>-1</button>
-			<button on:click={handleClick}>-5</button>
-			<button on:click={handleClick}>Reset</button>
+			<button onclick={handleClick}>5</button>
+			<button onclick={handleClick}>1</button>
+			<button onclick={handleClick}>-1</button>
+			<button onclick={handleClick}>-5</button>
+			<button onclick={handleClick}>Reset</button>
 		</form>
 	</section>
 	<section>
