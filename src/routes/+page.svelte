@@ -6,8 +6,12 @@
 	import Thermometer from '$lib/components/thermometer.svelte';
 	// import Range from '$lib/components/range.svelte';
 	let { data } = $props();
-
 	onMount(() => {
+		document.addEventListener('visibilitychange', (event) => {
+			if (document.visibilityState == 'visible') {
+				invalidate('api:data');
+			}
+		});
 		let interval = setInterval(() => {
 			invalidate('api:data');
 		}, 4000);
