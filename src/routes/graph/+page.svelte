@@ -1,19 +1,12 @@
 <script>
-	import { run } from 'svelte/legacy';
-
-	import { browser } from '$app/environment';
 	import { fade, blur } from 'svelte/transition';
+	import LineChart from './LineChart.svelte';
 	import { enhance } from '$app/forms';
 	import '$lib/styles/global.css';
-	import LineChart from './LineChart.svelte';
 	let visible = true;
 	let { data, form } = $props();
 	let chartData = $state([]);
-	//data.temps.map(a => console.log(getUnixTime(parseISO(a.time))));
-	let formElement;
 	let zoom = $state(0);
-	//$: console.log(data);
-	//$: form && console.log(form);
 	function handleClick(e) {
 		if (e.srcElement.innerText == 'Reset') {
 			zoom = 0;
@@ -22,8 +15,12 @@
 			if (zoom < 0) zoom = 0;
 		}
 	}
-	run(() => {
-		chartData = zoom != 0 ? form?.temp || data?.temp : data?.temp;
+	$effect(() => {
+		if (zoom != 0) {
+			chartData = form?.temp;
+		} else {
+			chartData = data?.temp;
+		}
 	});
 </script>
 
@@ -47,19 +44,15 @@
 	</section>
 	<section>
 		{#if visible}
-		<div transition:fade={{ delay: 0, duration: 150 }}>
-
-			<LineChart data={chartData} />
-		</div>
+			<div transition:fade={{ delay: 0, duration: 150 }}>
+				{#if chartData?.length > 0}
+					<LineChart data={chartData} />
+				{:else}
+					<p>Loading...</p>
+				{/if}
+			</div>
 		{/if}
 	</section>
-	<!-- <ul>
-		{#each data.temps as temp}
-			<li>
-				{temp.temp}
-			</li>
-		{/each}
-	</ul> -->
 </div>
 
 <style>
