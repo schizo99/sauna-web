@@ -40,7 +40,7 @@
   <title>Sauna Temperature: {temperature}°C</title>
   <meta property="og:title" content="Sauna Temperature: {temperature}°C">
   <meta property="og:description" content="{description}">
-  <meta property="og:image" content="/og-image.png">
+  <meta property="og:image" content="{import.meta.env.BASE_URL}/og-image.png">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{import.meta.env.BASE_URL}">
 </svelte:head>
