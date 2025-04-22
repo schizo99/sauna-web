@@ -30,11 +30,19 @@
 	let min = $state(-10);
 	let max = $state(90);
 	let bulb = $state(10);
+	let description = $derived.by(() => {
+		return `The current sauna temperature is ${temperature}°C.`;
+	});
+
 </script>
 
 <svelte:head>
-	<title>Sauna thermometer</title>
-	<meta name="description" content="Sauna temp" />
+  <title>Sauna Temperature: {temperature}°C</title>
+  <meta property="og:title" content="Sauna Temperature: {temperature}°C">
+  <meta property="og:description" content="{description}">
+  <meta property="og:image" content="og-image.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{import.meta.env.BASE_URL}">
 </svelte:head>
 <!-- <div class="controls">
 	<Range id="temp" label="Temperature" {min} {max} bind:value={temperature} />
